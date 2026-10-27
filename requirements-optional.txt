@@ -1,0 +1,7 @@
+# Optional dependencies used by training or auxiliary entry points.
+peft
+matplotlib
+rouge-score
+spacy
+accelerate
+bitsandbytes; platform_system == 'Linux'
