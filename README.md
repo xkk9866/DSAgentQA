@@ -1,7 +1,6 @@
 # DSAgentQA / CREDENCE
 
-Code for credibility- and dependence-aware evidence aggregation in
-retrieval-augmented generation.
+CREDENCE combines answers from retrieved sources by estimating their credibility and accounting for dependence between them. This repository contains the evidence-reading pipeline, the aggregation model and experiments on knowledge poisoning in retrieval-augmented generation.
 
 ## Code map
 
@@ -22,11 +21,13 @@ python -m pip install -r requirements-optional.txt
 
 Set the following paths before executing experiments:
 
-- `ONCE_RAW`: prepared benchmark and training records.
-- `ONCE_CACHE`: cached reader outputs.
-- `ONCE_RUNS`: trained model artifacts.
-- `ONCE_RESULTS`: evaluation outputs.
-- `ONCE_MODEL_PATH`: optional local reader-model path override.
+| Variable | Contents |
+| --- | --- |
+| `ONCE_RAW` | Prepared benchmark and training records |
+| `ONCE_CACHE` | Cached reader outputs |
+| `ONCE_RUNS` | Trained model artifacts |
+| `ONCE_RESULTS` | Evaluation outputs |
+| `ONCE_MODEL_PATH` | Optional local reader-model override |
 
 Data preparation is implemented in `experiments/build_*.py`. Reading-cache
 construction uses `once_read.py` and `once_read_joint.py`. The cache model
@@ -53,27 +54,25 @@ Use `--train`, `--model` and `--eval` to select the prepared cache families.
 The runner includes controls for credibility, dependence, joint readings,
 direct scoring and adversarial reading-state training.
 
-## Release contents
+## Outputs and checks
 
-This repository contains the project source code, training and evaluation
-entry points, baseline implementations, and available tests. Experiment and
-metric-analysis code is retained. Manuscripts, downloaded reference papers,
-editorial notes, publication figures and LaTeX-table exporters are not included.
+`credence_run.py` writes evaluation records to
+`$ONCE_RESULTS/credence_<model>_<tag>_s<seed>.json`. The summary command groups
+matching runs by tag. Keep cache identifiers and model settings consistent
+between reading construction, training and evaluation.
 
-Datasets, model weights, local prediction caches, logs, and machine credentials
-are not distributed with this release. Obtain datasets and model weights from
-their original providers and follow their respective access and usage terms.
-Configuration defaults in some experimental scripts refer to the original
-Windows or Linux workspace; use the documented environment variables and
-command-line options, and review path constants before a full run.
+To check the aggregation properties:
 
-The release was checked for Python syntax and accidental inclusion of manuscript
-files and embedded credentials. This publication check does not rerun GPU
-training or certify that every experimental entry point is turnkey.
+```bash
+python experiments/test_properties.py
+```
 
-## Repository status
+## Data and configuration
 
-Public code repository: https://github.com/xkk9866/DSAgentQA
+Download benchmark datasets and pretrained models from their original providers
+and follow their usage terms. Data, checkpoints and generated predictions are
+stored locally and are not included in this repository.
 
-The public release is a code snapshot. Dataset and checkpoint availability is
-separate from source-code availability.
+Set the paths described above before running experiments. Some auxiliary scripts
+use fixed local path defaults; adjust those paths for your installation.
+The command examples assume execution from the repository root.
